@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aplikasi Eksperimen Stabilo</title>
+<style>
+:root{--navy:#17233b;--blue:#3158c9;--pale:#edf2ff;--bg:#f4f6fa;--line:#dfe4ed;--muted:#667085;--yellow:#fff176;--green:#16794b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font:16px/1.6 system-ui,Segoe UI,Arial,sans-serif}
+main{max-width:920px;margin:24px auto;padding:0 14px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.brand{font-weight:800;color:var(--blue);font-size:13px;letter-spacing:.07em;text-transform:uppercase}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;margin:14px 0;box-shadow:0 5px 22px #18294a08}
+h1{font-size:clamp(25px,4vw,36px);line-height:1.2;margin:8px 0}h2{font-size:23px;margin:0 0 10px}h3{font-size:18px;margin:18px 0 5px}
+p{margin:9px 0}.muted{color:var(--muted)}.tiny{font-size:12px}.pill{display:inline-block;border-radius:30px;background:var(--pale);color:var(--blue);font-size:12px;font-weight:750;padding:4px 10px}
+.progress{height:7px;background:#e8ebf2;border-radius:20px;overflow:hidden;margin:14px 0}.progress span{display:block;height:100%;background:var(--blue);width:0}
+label{display:block;font-weight:650;font-size:14px;margin:12px 0 5px}input,select{width:100%;padding:11px;border:1px solid #cbd3e0;border-radius:10px;font:inherit}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:11px;background:var(--blue);color:white;padding:12px 18px;font:700 15px system-ui;cursor:pointer}button.alt{background:var(--pale);color:var(--blue)}button:disabled{opacity:.45;cursor:not-allowed}
+.notice{padding:13px;border-radius:12px;background:#fff8e8;border:1px solid #f1d69a;color:#6a4a0b}
+.reading{font-size:16px;line-height:1.85}.reading p{margin:0 0 14px}.reading mark{background:#fff176;padding:1px 0}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}.timer{font-size:42px;text-align:center;font-weight:850;font-variant-numeric:tabular-nums}
+.symbols{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:18px 0}.sym{background:#f5f7fb;color:var(--navy);border:1px solid var(--line);font-size:25px;padding:12px 2px}.sym.hit{background:#dce6ff;border-color:var(--blue)}
+.q{border-bottom:1px solid var(--line);padding:15px 0}.q p{font-weight:700}.opt{display:block;font-weight:400;margin:7px 0}.opt input{width:auto;margin-right:7px}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.hidden{display:none!important}.right{text-align:right}footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:620px){.grid{grid-template-columns:1fr}.card{padding:18px}.symbols{grid-template-columns:repeat(4,1fr)}}
+</style></head><body><main>
+<div class="top"><div></div><button class="alt" onclick="openAdmin()">Dashboard peneliti</button></div>
+<div class="progress"><span id="progress"></span></div>
+<section id="home" class="card"><div class="btns"><button onclick="show('identity')">Mulai</button></div></section>
+<section id="identity" class="card hidden"><h2>Data partisipan</h2><div class="grid">
+<div><label>Nama</label><input id="participantName" autocomplete="name" placeholder="Masukkan nama lengkap" required></div>
+<div><label>Usia</label><input id="age" type="number" min="10" max="100" inputmode="numeric" placeholder="Usia dalam tahun" required></div>
+<div><label>Asal sekolah/universitas</label><input id="institution" placeholder="Masukkan asal sekolah/universitas" required></div>
+<div><label>Jurusan/program studi</label><input id="major" placeholder="Masukkan jurusan/program studi" required></div>
+<div><label>Kelas</label><input id="className" placeholder="Contoh: A / Reguler 2" required></div>
+<div><label>Semester</label><input id="semester" type="number" min="1" max="14" inputmode="numeric" placeholder="Masukkan semester" required></div>
+</div><div class="btns"><button onclick="toConsent()">Lanjut</button></div></section>
+<section id="consent" class="card hidden"><h2>Lembar persetujuan partisipasi</h2>
+<p>Anda diundang mengikuti kegiatan penelitian yang melibatkan tiga sesi membaca, beberapa aktivitas singkat, dan pertanyaan terkait bacaan. Ikuti instruksi pada setiap tahap. Tidak ada jawaban benar atau salah pada aktivitas pemilihan gambar.</p>
+<p>Keikutsertaan bersifat sukarela. Anda dapat berhenti kapan saja tanpa sanksi. Beberapa orang mungkin mengalami kelelahan ringan karena membaca dan menjawab soal. Jawaban akan dianalisis menggunakan kode partisipan; nama tidak ditampilkan dalam tabel analisis atau laporan.</p>
+<p><b>Peneliti:</b> Hasna Azzah L.<br><b>Email:</b> hasnaazzahlabibah@gmail.com<br><b>Kontak:</b> 085742319441<br><b>Institusi/afiliasi peneliti:</b> UIN Sunan Kalijaga Yogyakarta</p>
+<p class="muted tiny">Sebelum pengambilan data resmi, lengkapi identitas dan kontak peneliti, prosedur penyimpanan/penghapusan data, serta persetujuan etik yang berlaku di institusi.</p>
+<label class="opt"><input type="checkbox" id="agree"> Saya telah membaca informasi di atas, memahami hak saya, dan bersedia berpartisipasi secara sukarela.</label>
+<div class="btns"><button onclick="start()">Setuju dan mulai</button></div></section>
+<section id="reading" class="card hidden"><div class="pill" id="sessionTag"></div><h2 id="readingTitle" style="font-size:28px;line-height:1.25;margin:18px 0"></h2><p id="instructions" class="muted"></p><div class="toolbar" id="highlightTools"><button class="alt" onclick="highlightSelection()">Sorot pilihan saya</button><button class="alt" onclick="removeHighlights()">Hapus sorotan saya</button><span class="tiny muted">Pilih teks terlebih dahulu.</span></div><article id="article" class="reading"></article><div class="btns"><button onclick="finishRead()">Saya selesai membaca</button></div></section>
+<section id="symbols" class="card hidden"><h2>Aktivitas pemilihan gambar</h2><p id="imageInstruction">Pilih semua gambar yang sama dengan gambar target. Setelah semua gambar target ditemukan, target akan berganti ke objek berikutnya.</p><div class="timer" id="clock">01:00</div><h2 id="target" style="text-align:center;font-size:48px"></h2><p class="muted tiny" id="targetProgress" style="text-align:center"></p><div class="symbols" id="symbolGrid"></div><p id="symbolStatus" class="muted tiny">Aktivitas berlangsung selama 1 menit. Target gambar akan berganti otomatis setelah seluruh gambar yang cocok ditemukan.</p></section>
+<section id="quiz" class="card hidden"><div class="pill" id="quizTag"></div><h2>Tes pemahaman bacaan</h2><p class="muted">Pilih satu jawaban paling tepat untuk setiap pertanyaan.</p><form id="quizForm"></form><div class="btns"><button onclick="submitQuiz()">Kirim jawaban</button></div></section>
+<section id="finish" class="card hidden"><h2>Seluruh sesi telah selesai</h2><p>Anda telah menyelesaikan seluruh bacaan, aktivitas, dan pertanyaan.</p><p>Kode partisipan Anda:</p><h1 id="finalCode"></h1><p>Jika sudah yakin seluruh rangkaian telah dikerjakan, tekan tombol berikut untuk mengonfirmasi penyelesaian.</p><div class="btns"><button onclick="confirmCompletion()">Konfirmasi Selesai</button></div></section>
+<section id="confirmation" class="card hidden"><div style="text-align:center;padding:18px 0"><div style="font-size:56px;color:#16834a">✓</div><h1>Eksperimen Berhasil Diselesaikan!</h1><p>Terima kasih telah berpartisipasi dalam penelitian ini.</p><p><b>Status: Selesai</b></p><p>Kode partisipan Anda:</p><h1 id="confirmedCode"></h1><p>Seluruh jawaban Anda telah berhasil disimpan pada perangkat ini. Silakan informasikan kepada peneliti bahwa Anda telah selesai. Anda dapat menutup halaman ini.</p></div></section>
+<section id="admin" class="card hidden"><h2>Dashboard peneliti (lokal)</h2><p class="muted tiny">Data hanya berasal dari browser ini. PIN awal prototipe: 2468. Ganti sebelum demonstrasi; autentikasi ini bukan keamanan produksi.</p><div class="grid"><div><label>PIN dashboard</label><input id="pin" type="password"></div><div class="btns" style="align-items:end"><button onclick="loginAdmin()">Masuk</button></div></div><div id="adminData" class="hidden"><div class="btns"><button onclick="exportCSV()">Ekspor CSV</button><button class="alt" onclick="exportJSON()">Ekspor JSON</button></div><div id="tableWrap"></div></div><div class="btns"><button class="alt" onclick="show('home')">Kembali</button></div></section>
+
+</main>
+<script>
+const texts=[
+{title:'Tardigrada: Hewan Mikroskopis yang Bertahan dalam Kondisi Ekstrem',paras:[
+'Tardigrada adalah hewan mikroskopis yang sering dijuluki beruang air karena bentuk tubuhnya yang gemuk dan cara bergeraknya yang menyerupai beruang. Ukurannya umumnya kurang dari satu milimeter, sehingga sebagian besar hanya dapat diamati dengan mikroskop. Hewan ini memiliki delapan kaki pendek dengan cakar kecil pada ujungnya.',
+'Tardigrada ditemukan di berbagai lingkungan, mulai dari lumut, tanah lembap, dasar danau, hingga laut. Meskipun sering dikaitkan dengan tempat basah, tardigrada juga dapat ditemukan di habitat yang mengalami perubahan kadar air. Keberadaannya di lingkungan yang beragam menunjukkan kemampuan adaptasi yang menarik.',
+'Salah satu kemampuan tardigrada yang paling terkenal adalah memasuki keadaan cryptobiosis. Dalam keadaan ini, aktivitas metabolisme tubuh menurun sangat drastis ketika kondisi lingkungan tidak mendukung kehidupan aktif. Cryptobiosis bukan berarti hewan tersebut mati, melainkan berada dalam keadaan dorman yang dapat berakhir ketika kondisi kembali sesuai.',
+'Ketika kekurangan air, beberapa tardigrada memasuki keadaan yang disebut anhydrobiosis. Tubuhnya menyusut dan membentuk keadaan kompak yang dikenal sebagai tun. Bentuk ini membantu mengurangi kehilangan air dan memungkinkan hewan bertahan selama periode kering yang panjang.',
+'Saat air kembali tersedia, tardigrada dapat menyerap air dan keluar dari keadaan tun. Proses pemulihan ini disebut rehidrasi. Setelah kondisi internal pulih, aktivitas tubuh dapat berangsur kembali. Keberhasilan proses tersebut bergantung pada spesies, kondisi lingkungan, serta lama dan tingkat tekanan yang dialami.',
+'Ketahanan tardigrada tidak berasal dari satu mekanisme tunggal. Sejumlah proses biologis bekerja bersama untuk melindungi struktur sel ketika organisme menghadapi kekeringan, suhu ekstrem, atau tekanan lain. Penelitian menunjukkan bahwa protein tertentu dapat membantu menjaga kestabilan komponen sel selama kondisi merugikan.',
+'Pada beberapa spesies, protein khusus yang dikenal sebagai protein intrinsically disordered dapat berperan dalam melindungi molekul penting ketika air berkurang. Protein tersebut dapat membantu membentuk keadaan seperti kaca pada bagian dalam sel. Keadaan ini mengurangi gerakan molekul dan membantu membatasi kerusakan selama masa dorman.',
+'Ancaman lain bagi sel adalah stres oksidatif, yaitu kerusakan yang berkaitan dengan molekul reaktif. Tardigrada memiliki sistem perlindungan dan perbaikan yang membantu menghadapi tekanan tersebut. Namun, kemampuan ini berbeda antarspesies dan tidak berarti tardigrada kebal terhadap seluruh bentuk kerusakan.',
+'Radiasi juga menjadi salah satu faktor yang menarik perhatian peneliti. Beberapa tardigrada menunjukkan toleransi terhadap tingkat radiasi tertentu yang dapat merusak materi genetik organisme lain. Salah satu aspek yang diteliti adalah kemampuan melindungi dan memperbaiki DNA setelah mengalami kerusakan.',
+'Kemampuan bertahan tardigrada sering diberitakan secara berlebihan seolah-olah hewan ini tidak dapat mati. Kenyataannya, ketahanannya memiliki batas. Paparan kondisi ekstrem yang cukup kuat atau berlangsung terlalu lama tetap dapat menyebabkan kerusakan yang tidak dapat dipulihkan.',
+'Penelitian mengenai tardigrada juga dilakukan dalam konteks luar angkasa. Sejumlah eksperimen menguji respons tardigrada terhadap kondisi ruang angkasa, termasuk paparan radiasi dan keadaan vakum. Hasil eksperimen tersebut membantu ilmuwan memahami batas ketahanan organisme kecil, bukan membuktikan bahwa semua tardigrada dapat hidup tanpa batas di luar angkasa.',
+'Studi tardigrada dapat memberikan wawasan bagi bidang biologi sel dan bioteknologi. Mekanisme perlindungan selnya berpotensi menginspirasi cara menjaga bahan biologis agar lebih stabil selama penyimpanan atau pengangkutan. Akan tetapi, penerapan teknologi yang terinspirasi dari tardigrada masih memerlukan penelitian lebih lanjut.',
+'Selain nilai ilmiahnya, tardigrada juga mengingatkan bahwa ukuran tubuh tidak selalu mencerminkan kompleksitas kemampuan biologis. Organisme yang sangat kecil dapat memiliki strategi bertahan hidup yang rumit. Strategi tersebut terbentuk melalui proses evolusi dan penyesuaian terhadap perubahan lingkungan.',
+'Dengan demikian, tardigrada merupakan contoh organisme yang mampu menghadapi kondisi lingkungan yang berubah melalui mekanisme dormansi, perlindungan sel, dan pemulihan. Mempelajari hewan ini membantu ilmuwan memahami bagaimana kehidupan dapat bertahan ketika kondisi yang biasanya diperlukan untuk aktivitas biologis menjadi sangat terbatas.'
+]},
+{title:'Jamur Bioluminesen: Cahaya Alami dari Dunia Jamur',paras:[
+'Di beberapa hutan yang lembap dan gelap, sebagian jamur dapat memancarkan cahaya kehijauan. Fenomena ini disebut bioluminesensi, yaitu kemampuan organisme menghasilkan cahaya melalui reaksi kimia di dalam tubuhnya. Cahaya tersebut dapat terlihat pada bagian tudung, batang, atau jaringan lain, bergantung pada jenis jamurnya.',
+'Jamur bercahaya ditemukan pada sejumlah kelompok jamur, terutama dalam kelompok Basidiomycota. Beberapa contoh genus yang dikenal memiliki anggota bioluminesen adalah Mycena, Omphalotus, dan Armillaria. Tidak semua spesies dalam genus tersebut selalu bercahaya, sehingga identifikasi perlu dilakukan dengan memperhatikan spesiesnya.',
+'Cahaya pada jamur berasal dari reaksi biokimia. Dalam sistem yang telah dipelajari, senyawa luciferin bereaksi dengan bantuan enzim luciferase dan oksigen sehingga menghasilkan energi dalam bentuk cahaya. Reaksi tersebut berbeda dari proses pembakaran karena menghasilkan cahaya dengan panas yang relatif sangat rendah.',
+'Penelitian mengenai jamur bercahaya mengidentifikasi asam kafeat sebagai bagian penting dari jalur bioluminesensi jamur. Senyawa ini dapat mengalami perubahan kimia dalam rangkaian reaksi yang melibatkan enzim. Hasil akhirnya adalah molekul dalam keadaan tereksitasi yang melepaskan energi sebagai foton ketika kembali ke keadaan energi lebih rendah.',
+'Intensitas cahaya jamur umumnya redup jika dibandingkan dengan lampu buatan. Karena itu, cahaya lebih mudah diamati di tempat gelap dengan sedikit gangguan pencahayaan. Warna yang sering tampak adalah hijau, tetapi penampakan warna dapat dipengaruhi kondisi pengamatan dan karakteristik spesies.',
+'Kemampuan menghasilkan cahaya membutuhkan energi dan bahan kimia tertentu. Oleh sebab itu, bioluminesensi bukan sekadar warna pada permukaan jamur. Cahaya merupakan hasil aktivitas metabolik yang dikendalikan oleh sistem biokimia organisme.',
+'Para ilmuwan masih meneliti fungsi ekologis cahaya pada jamur. Salah satu hipotesis menyatakan bahwa cahaya dapat menarik serangga atau hewan kecil yang kemudian membantu penyebaran spora. Hewan yang tertarik mendekat dapat membawa spora ke lokasi lain, sehingga berpotensi membantu reproduksi jamur.',
+'Namun, fungsi menarik serangga belum tentu berlaku pada semua jamur bercahaya. Peran cahaya dapat berbeda sesuai spesies, habitat, dan interaksi ekologisnya. Karena itu, hipotesis mengenai fungsi cahaya perlu diuji melalui pengamatan dan eksperimen, bukan dianggap sebagai penjelasan tunggal.',
+'Jamur merupakan bagian penting dari ekosistem karena banyak spesies berperan sebagai pengurai. Jamur menguraikan bahan organik dari tumbuhan atau organisme yang telah mati, lalu membantu mengembalikan unsur hara ke lingkungan. Bioluminesensi hadir pada sebagian jamur yang menjalankan peran ekologis tersebut.',
+'Jaringan jamur yang disebut miselium tersusun dari benang-benang halus bernama hifa. Miselium dapat tumbuh di dalam kayu, tanah, atau bahan organik lain. Pada beberapa jamur bioluminesen, bagian miselium juga dapat memancarkan cahaya, sehingga sumber cahaya tidak selalu terbatas pada tubuh buah yang terlihat.',
+'Kondisi lingkungan dapat memengaruhi pertumbuhan dan tampilan cahaya jamur. Ketersediaan nutrisi, kelembapan, suhu, serta tahap perkembangan dapat berhubungan dengan aktivitas metabolik. Perbedaan kondisi tersebut membuat intensitas cahaya yang diamati tidak selalu sama.',
+'Bioluminesensi jamur menarik minat peneliti bioteknologi. Sistem penghasil cahaya dapat dimanfaatkan sebagai inspirasi untuk mengembangkan penanda biologis atau alat pemantau proses sel. Sistem cahaya biologis berpotensi membantu peneliti mengamati aktivitas tertentu tanpa selalu menggunakan sumber cahaya eksternal.',
+'Walaupun demikian, penerapan teknologi yang terinspirasi dari jamur masih menghadapi tantangan. Ilmuwan perlu memahami jalur reaksi, kestabilan senyawa, kebutuhan energi, serta cara mengendalikan produksi cahaya. Temuan di laboratorium juga perlu diuji sebelum digunakan dalam teknologi praktis.',
+'Jamur bioluminesen memperlihatkan bahwa cahaya tidak hanya dihasilkan oleh matahari, api, atau perangkat listrik. Organisme hidup tertentu mampu menghasilkan cahaya melalui reaksi kimia yang berlangsung di dalam sel. Fenomena ini membuka kesempatan untuk mempelajari hubungan antara metabolisme, adaptasi, dan interaksi antarorganisme.',
+'Dengan mempelajari jamur bercahaya, ilmuwan dapat memahami lebih jauh keanekaragaman strategi hidup di alam. Fenomena bioluminesensi menghubungkan proses molekuler dengan fungsi ekologis dan kemungkinan penerapan teknologi. Meski masih banyak pertanyaan yang belum terjawab, jamur bercahaya menjadi contoh menarik dari kemampuan biologis organisme.'
+]},
+{title:'Navigasi Hewan: Bagaimana Hewan Menemukan Arah',paras:[
+'Banyak hewan melakukan perjalanan jauh untuk mencari makanan, berkembang biak, atau berpindah ke tempat dengan kondisi lingkungan yang lebih sesuai. Perjalanan tersebut membutuhkan kemampuan navigasi, yaitu kemampuan menentukan arah dan menemukan lokasi tujuan. Navigasi hewan dapat melibatkan beberapa petunjuk lingkungan sekaligus.',
+'Salah satu petunjuk yang dipelajari adalah medan magnet bumi. Bumi memiliki medan magnet yang dihasilkan oleh proses di bagian dalam planet. Medan ini memiliki arah dan intensitas yang bervariasi menurut lokasi, sehingga berpotensi menjadi informasi bagi hewan yang melakukan perjalanan.',
+'Kemampuan organisme mendeteksi informasi magnetik disebut magnetoresepsi. Sejumlah penelitian menunjukkan bahwa berbagai hewan, termasuk burung, penyu, ikan, dan serangga tertentu, dapat menggunakan informasi magnetik dalam orientasi. Namun, mekanisme biologis yang mendasarinya belum sepenuhnya dipahami untuk semua kelompok hewan.',
+'Pada beberapa burung, salah satu mekanisme yang banyak diteliti melibatkan protein cryptochrome di retina mata. Protein ini peka terhadap cahaya dan diduga terlibat dalam proses yang memungkinkan burung memperoleh informasi arah dari medan magnet. Mekanisme tersebut sering dibahas melalui model pasangan radikal atau radical pair mechanism.',
+'Menurut model pasangan radikal, penyerapan cahaya dapat memicu reaksi yang menghasilkan pasangan molekul dengan elektron tidak berpasangan. Arah medan magnet dapat memengaruhi dinamika reaksi tersebut. Perubahan reaksi kemudian diduga menghasilkan sinyal biologis yang dapat digunakan sebagai informasi orientasi.',
+'Model tersebut masih menjadi bagian dari penelitian aktif. Peneliti terus menguji bagaimana sinyal molekuler dapat diterjemahkan menjadi pengalaman sensorik dan perilaku. Karena itu, cryptochrome tidak boleh dianggap sebagai satu-satunya penjelasan navigasi magnetik pada seluruh hewan.',
+'Burung robin Eropa merupakan salah satu hewan yang banyak digunakan dalam penelitian orientasi magnetik. Dalam kondisi eksperimen tertentu, burung ini menunjukkan orientasi yang berkaitan dengan medan magnet. Penelitian pada robin membantu mengembangkan pemahaman tentang kemungkinan hubungan antara penglihatan, medan magnet, dan navigasi.',
+'Hewan tidak selalu mengandalkan medan magnet saja. Matahari dapat menjadi petunjuk arah melalui posisi dan pergerakannya sepanjang hari. Beberapa hewan juga menggunakan pola bintang, bentuk lanskap, bau, suara, atau arus air untuk membantu menentukan lokasi dan arah perjalanan.',
+'Penggunaan petunjuk matahari membutuhkan mekanisme kompensasi terhadap perubahan posisi matahari. Hewan yang mengandalkan petunjuk tersebut perlu memperhitungkan waktu dalam sehari. Jam biologis internal dapat membantu menghubungkan posisi matahari dengan arah yang tepat.',
+'Navigasi juga dapat melibatkan peta lingkungan. Hewan dapat mengenali ciri geografis, garis pantai, pegunungan, atau lokasi tertentu yang pernah dilalui. Pengalaman sebelumnya dapat membantu memperbaiki ketepatan perjalanan, terutama pada hewan yang melakukan migrasi berulang.',
+'Penyu tempayan merupakan contoh hewan yang melakukan perjalanan jauh antara wilayah mencari makan dan lokasi bertelur. Penelitian menunjukkan bahwa penyu dapat memanfaatkan petunjuk geomagnetik untuk orientasi. Informasi medan magnet diduga membantu penyu mengenali wilayah tertentu selama perjalanan di laut terbuka.',
+'Kemampuan navigasi dapat terbentuk melalui gabungan faktor bawaan dan pengalaman. Sebagian respons orientasi dapat muncul tanpa pengalaman perjalanan sebelumnya, sedangkan ketepatan rute dapat meningkat melalui pembelajaran. Peran relatif kedua faktor tersebut berbeda pada tiap spesies.',
+'Perubahan lingkungan dapat mengganggu petunjuk navigasi. Cahaya buatan, polusi, perubahan lanskap, dan gangguan medan magnet lokal berpotensi memengaruhi orientasi beberapa hewan. Dampaknya bergantung pada spesies dan petunjuk yang paling banyak digunakan.',
+'Meneliti navigasi hewan bukan perkara mudah karena perilaku berlangsung di lingkungan yang kompleks. Ilmuwan perlu memisahkan pengaruh medan magnet dari petunjuk lain seperti cahaya, bau, dan bentuk lanskap. Eksperimen terkontrol serta pengamatan lapangan saling melengkapi untuk menguji hipotesis.',
+'Secara keseluruhan, navigasi hewan merupakan kemampuan kompleks yang melibatkan integrasi berbagai informasi sensorik. Medan magnet bumi dapat menjadi salah satu petunjuk penting, tetapi bukan satu-satunya alat navigasi. Memahami kemampuan ini membantu menjelaskan migrasi, perilaku, dan cara hewan beradaptasi dengan lingkungannya.'
+]}];
+const questions=[
+[
+['Apa julukan tardigrada yang berkaitan dengan bentuk dan geraknya?',['Kutu air','Beruang air','Cacing tanah','Serangga lumut'],'B'],
+['Ukuran tardigrada umumnya bagaimana?',['Lebih dari 10 cm','Sekitar 5 cm','Kurang dari satu milimeter','Selalu terlihat tanpa alat'],'C'],
+['Apa yang dimaksud cryptobiosis?',['Keadaan aktivitas metabolisme sangat menurun','Proses berkembang biak cepat','Perubahan menjadi spesies lain','Kondisi tubuh menghasilkan cahaya'],'A'],
+['Anhydrobiosis terjadi terutama ketika tardigrada mengalami apa?',['Kekurangan oksigen','Kekurangan air','Kelebihan nutrisi','Paparan suara'],'B'],
+['Apa nama bentuk kompak tardigrada saat mengalami kekeringan?',['Spora','Miselium','Tun','Hifa'],'C'],
+['Apa yang dimaksud rehidrasi pada tardigrada?',['Menyerap air kembali setelah kondisi kering','Mengeluarkan seluruh cairan tubuh','Mengganti kulit','Membelah diri'],'A'],
+['Protein intrinsically disordered dapat membantu dengan cara apa?',['Menghasilkan panas tinggi','Membantu menjaga kestabilan komponen sel','Mengubah tardigrada menjadi tumbuhan','Menghentikan seluruh reaksi kimia permanen'],'B'],
+['Stres oksidatif berkaitan dengan apa?',['Kerusakan akibat molekul reaktif','Kekurangan cahaya matahari','Perubahan bentuk kaki','Peningkatan ukuran tubuh'],'A'],
+['Mengapa kemampuan menghadapi radiasi menarik bagi peneliti?',['Radiasi selalu menguntungkan hewan','Radiasi membuat hewan bercahaya','Ada mekanisme perlindungan dan perbaikan DNA','Tardigrada tidak memiliki DNA'],'C'],
+['Apa tujuan eksperimen tardigrada di luar angkasa?',['Membuktikan semua tardigrada hidup abadi','Mempelajari respons terhadap kondisi ruang angkasa','Mengubah tardigrada menjadi astronot','Menguji kemampuan terbang'],'B'],
+['Pernyataan mana yang sesuai dengan bacaan tentang batas ketahanan tardigrada?',['Tardigrada tidak dapat mati','Semua spesies kebal terhadap segala tekanan','Ketahanannya memiliki batas','Tardigrada hanya hidup di ruang angkasa'],'C'],
+['Mengapa aplikasi bioteknologi yang terinspirasi tardigrada masih perlu diteliti?',['Mekanismenya belum otomatis dapat diterapkan menjadi teknologi','Tardigrada tidak memiliki protein','Semua proses biologisnya telah diketahui','Tidak ada manfaat ilmiah'],'A'],
+['Apa hubungan ukuran tubuh dan kemampuan biologis menurut bacaan?',['Organisme kecil selalu sederhana','Ukuran kecil tidak meniadakan kemampuan biologis kompleks','Organisme besar tidak dapat beradaptasi','Ukuran menentukan seluruh perilaku'],'B'],
+['Bagaimana tardigrada menghadapi kondisi yang tidak mendukung kehidupan aktif?',['Dengan bermigrasi ke bulan','Dengan menghasilkan spora','Dengan memasuki keadaan dorman dan melindungi sel','Dengan menghentikan fungsi gen secara permanen'],'C'],
+['Kesimpulan utama bacaan adalah tardigrada menjadi contoh bahwa…',['ketahanan biologis melibatkan beberapa mekanisme adaptasi','semua hewan dapat hidup tanpa air selamanya','radiasi tidak merusak organisme','ukuran tubuh menentukan daya tahan'],'A']
+],
+[
+['Apa yang dimaksud bioluminesensi?',['Pantulan cahaya matahari','Kemampuan organisme menghasilkan cahaya melalui reaksi kimia','Perubahan warna karena suhu','Cahaya dari pembakaran jaringan'],'B'],
+['Genus mana yang disebut sebagai contoh kelompok jamur dengan anggota bioluminesen?',['Mycena','Agaricus saja','Rhizopus saja','Penicillium saja'],'A'],
+['Komponen yang terlibat dalam reaksi penghasil cahaya jamur antara lain…',['Klorofil dan nitrogen','Hemoglobin dan air','Luciferin, luciferase, dan oksigen','Kalsium dan garam'],'C'],
+['Apa peran asam kafeat dalam jalur bioluminesensi jamur menurut bacaan?',['Sebagai bagian penting jalur reaksi kimia','Sebagai pigmen hijau daun','Sebagai sumber medan magnet','Sebagai struktur kaki jamur'],'A'],
+['Mengapa cahaya jamur lebih mudah diamati di tempat gelap?',['Cahayanya sangat panas','Intensitasnya umumnya redup','Jamur hanya bercahaya saat siang','Cahaya tidak dapat melewati udara'],'B'],
+['Mengapa bioluminesensi bukan sekadar warna pada permukaan jamur?',['Karena merupakan hasil aktivitas metabolik','Karena selalu berasal dari bakteri luar','Karena disebabkan pantulan bulan','Karena tidak melibatkan reaksi kimia'],'A'],
+['Salah satu hipotesis fungsi cahaya jamur adalah…',['Mengusir seluruh hewan','Menarik hewan kecil yang membantu penyebaran spora','Menghasilkan oksigen untuk hutan','Mengubah kayu menjadi batu'],'B'],
+['Mengapa hipotesis fungsi ekologis cahaya tidak boleh dianggap berlaku untuk semua jamur?',['Karena semua jamur hidup di laut','Karena fungsi dapat berbeda menurut spesies dan habitat','Karena cahaya tidak pernah diamati','Karena jamur tidak berinteraksi dengan organisme lain'],'B'],
+['Apa peran umum jamur sebagai pengurai?',['Mengembalikan unsur hara ke lingkungan','Menghasilkan medan magnet bumi','Menghentikan daur materi','Mengubah cahaya menjadi suara'],'A'],
+['Apa itu miselium?',['Kumpulan benang hifa','Kumpulan biji jamur','Lapisan kulit hewan','Alat penghasil oksigen'],'A'],
+['Faktor apa yang dapat memengaruhi pertumbuhan dan tampilan cahaya jamur?',['Kelembapan dan suhu','Warna pakaian pengamat','Fase bulan saja','Arah angin saja'],'A'],
+['Salah satu kemungkinan penerapan sistem cahaya jamur dalam bioteknologi adalah…',['Penanda biologis untuk memantau proses sel','Pengganti seluruh sumber energi dunia','Pembuatan medan magnet buatan','Pengukur gempa tanpa sensor'],'A'],
+['Mengapa teknologi yang terinspirasi dari jamur masih menghadapi tantangan?',['Jalur reaksi dan kestabilannya perlu dipahami dan dikendalikan','Jamur tidak dapat tumbuh di laboratorium','Cahaya jamur selalu terlalu terang','Semua enzim jamur telah hilang'],'A'],
+['Apa hubungan bioluminesensi dengan metabolisme?',['Cahaya merupakan hasil reaksi biokimia organisme','Cahaya hanya berasal dari pantulan','Cahaya terjadi tanpa proses sel','Cahaya selalu berasal dari panas tinggi'],'A'],
+['Gagasan utama bacaan adalah…',['jamur bercahaya memperlihatkan hubungan proses molekuler, ekologi, dan potensi teknologi','semua jamur menghasilkan cahaya yang sama','cahaya jamur hanya berguna bagi manusia','jamur bercahaya tidak memiliki fungsi ekologis'],'A']
+],
+[
+['Apa pengertian navigasi hewan?',['Kemampuan menentukan arah dan menemukan lokasi tujuan','Kemampuan mengubah warna tubuh','Kemampuan menghasilkan cahaya','Kemampuan mengatur suhu air'],'A'],
+['Medan magnet bumi dihasilkan oleh proses di bagian mana?',['Atmosfer atas','Bagian dalam planet','Permukaan laut','Awan'],'B'],
+['Apa istilah kemampuan mendeteksi informasi magnetik?',['Bioluminesensi','Anhydrobiosis','Magnetoresepsi','Fotosintesis'],'C'],
+['Protein yang diteliti dalam kaitannya dengan orientasi magnetik burung adalah…',['Luciferase','Cryptochrome','Hemoglobin','Keratin'],'B'],
+['Radical pair mechanism menjelaskan bahwa medan magnet dapat memengaruhi…',['Dinamika reaksi pasangan molekul dengan elektron tidak berpasangan','Jumlah kaki burung','Warna bulu secara langsung','Pembentukan tulang'],'A'],
+['Mengapa cryptochrome tidak boleh dianggap sebagai satu-satunya penjelasan navigasi semua hewan?',['Mekanisme berbeda dan masih diteliti pada berbagai kelompok','Semua hewan tidak memiliki mata','Medan magnet tidak ada di bumi','Burung tidak bermigrasi'],'A'],
+['Mengapa robin Eropa sering diteliti?',['Menunjukkan orientasi yang berkaitan dengan medan magnet dalam kondisi eksperimen','Tidak menggunakan petunjuk lingkungan','Hidup hanya di dalam air','Tidak memiliki jam biologis'],'A'],
+['Selain medan magnet, hewan dapat menggunakan petunjuk…',['Matahari, bintang, bau, dan lanskap','Warna pakaian manusia saja','Sinyal radio buatan saja','Suhu tubuh peneliti'],'A'],
+['Mengapa penggunaan matahari sebagai petunjuk arah membutuhkan kompensasi?',['Posisi matahari berubah sepanjang hari','Matahari tidak menghasilkan cahaya','Medan magnet selalu hilang siang hari','Arah angin selalu berlawanan'],'A'],
+['Apa yang dimaksud peta lingkungan dalam navigasi?',['Pengenalan ciri geografis atau lokasi yang pernah dilalui','Penggunaan peta kertas oleh hewan','Pengukuran berat tubuh','Pengamatan warna makanan'],'A'],
+['Penyu tempayan dapat menggunakan informasi apa untuk orientasi?',['Petunjuk geomagnetik','Bunyi kendaraan','Cahaya lampu rumah saja','Arah aliran udara'],'A'],
+['Bagaimana faktor bawaan dan pengalaman berperan dalam navigasi?',['Keduanya dapat berkontribusi dengan proporsi berbeda antarspesies','Hanya pengalaman yang selalu berperan','Hanya faktor bawaan yang selalu berperan','Keduanya tidak berhubungan dengan navigasi'],'A'],
+['Faktor lingkungan apa yang berpotensi mengganggu orientasi hewan?',['Cahaya buatan dan perubahan lanskap','Pergantian nama spesies','Warna buku peneliti','Jumlah paragraf bacaan'],'A'],
+['Mengapa penelitian navigasi hewan sulit dilakukan?',['Petunjuk lingkungan saling berinteraksi dan perlu dipisahkan','Hewan tidak pernah bergerak','Semua hewan memiliki mekanisme identik','Medan magnet dapat dilihat langsung oleh manusia'],'A'],
+['Kesimpulan utama bacaan adalah…',['Navigasi melibatkan integrasi berbagai informasi sensorik','Semua hewan hanya memakai medan magnet','Navigasi sepenuhnya ditentukan matahari','Pengalaman tidak pernah memengaruhi navigasi'],'A']
+]];
+// Kunci dibuat dari opsi yang ditandai benar pada bank soal; tetap perlu telaah ahli sebelum penggunaan resmi.
+// Kalimat target awal untuk sorotan peneliti; proporsi kata harus dihitung ulang
+// dari naskah final sebelum klaim persentase tertentu dibuat.
+// Sorotan peneliti dipilih berdasarkan informasi inti, bukan kalimat pembuka paragraf.
+// Setiap pasangan berisi [indeks paragraf, indeks kalimat dalam paragraf] (indeks dimulai dari 0).
+const highlightMap=[
+ [[2,0],[2,1],[3,0],[3,1],[5,0],[6,1],[8,1],[9,1],[11,1],[13,0]],
+ [[2,0],[2,1],[3,0],[3,1],[5,0],[6,0],[7,1],[8,0],[11,1],[12,0]],
+ [[1,0],[2,0],[3,0],[4,0],[4,1],[7,0],[8,1],[9,0],[10,1],[11,0],[12,0]]
+];
+let participant=null,session=0,tick=null,remaining=60,symbolStats={selected:0,correct:0,wrong:0},quizAnswers=[];
+const names=['Tardigrada','Jamur bioluminesen','Navigasi hewan'];
+const conditions=['Tanpa stabilo','Stabilo mandiri','Stabilo peneliti'];
+const condPerm=[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+const readPerm=[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+const screens=['home','identity','consent','reading','symbols','quiz','finish','confirmation','admin'];
+function show(id){screens.forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));let i=screens.indexOf(id);document.getElementById('progress').style.width=(Math.max(0,i)/8*100)+'%';window.scrollTo(0,0)}
+function toConsent(){let name=document.getElementById('participantName').value.trim(),age=document.getElementById('age').value,inst=document.getElementById('institution').value.trim(),m=document.getElementById('major').value.trim(),c=document.getElementById('className').value.trim(),s=document.getElementById('semester').value.trim();if(!name||!age||!inst||!m||!c||!s){alert('Lengkapi nama, usia, asal sekolah/universitas, jurusan/program studi, kelas, dan semester terlebih dahulu.');return}if(Number(age)<10||Number(age)>100||!Number.isInteger(Number(age))){alert('Masukkan usia yang valid dalam tahun.');return}if(Number(s)<1||Number(s)>14||!Number.isInteger(Number(s))){alert('Masukkan semester antara 1 sampai 14.');return}participant={identity:{name,age:Number(age),institution:inst,major:m,className:c,semester:Number(s)}};show('consent')}
+function start(){if(!agree.checked){alert('Persetujuan perlu dicentang.');return}
+let all=JSON.parse(localStorage.getItem('stabilo_records')||'[]'),idx=all.length;
+participant.code='S'+String(idx+1);participant.startedAt=new Date().toISOString();participant.sessions=[];
+let cp=condPerm[idx%6],rp=readPerm[Math.floor(idx/6)%6];let pair=idx%3;
+participant.plan=[0,1,2].map(k=>({condition:cp[k],reading:(k+pair)%3}));
+// Randomize order of the three paired conditions using the chosen condition permutation's order.
+participant.plan.sort((a,b)=>cp.indexOf(a.condition)-cp.indexOf(b.condition));
+participant.plan=participant.plan.map((x,i)=>({...x,reading:(i+pair)%3}));
+session=0;showReading()}
+function showReading(){let x=participant.plan[session],a=texts[x.reading];sessionTag.textContent=`${participant.code} • Sesi ${session+1}/3`;readingTitle.textContent=a.title;instructions.textContent=x.condition===0?'Silakan baca teks berikut dengan saksama.':x.condition===1?'Silakan baca teks berikut. Anda dapat menandai bagian yang menurut Anda penting menggunakan tombol yang tersedia.':'Silakan baca teks berikut dengan saksama. Beberapa bagian telah diberi penanda.';highlightTools.classList.toggle('hidden',x.condition!==1);article.innerHTML=a.paras.map((p,i)=>{let sentences=p.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[p];let html=sentences.map((sentence,j)=>x.condition===2&&highlightMap[x.reading].some(([pi,sj])=>pi===i&&sj===j)?'<mark>'+esc(sentence)+'</mark>':esc(sentence)).join(' ');return `<p>${html}</p>`}).join('');show('reading')}
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function highlightSelection(){let sel=getSelection();if(!sel||!sel.toString().trim()){alert('Pilih teks terlebih dahulu.');return}let range=sel.getRangeAt(0);if(!article.contains(range.commonAncestorContainer)){alert('Sorotan hanya dapat dilakukan pada teks bacaan.');return}let mark=document.createElement('mark');try{range.surroundContents(mark)}catch(e){alert('Pilih bagian teks yang lebih sederhana, misalnya satu kalimat.')}sel.removeAllRanges()}
+function removeHighlights(){article.querySelectorAll('mark').forEach(m=>{m.replaceWith(document.createTextNode(m.textContent))});article.normalize()}
+function finishRead(){participant.sessions[session]={reading:participant.plan[session].reading,condition:participant.plan[session].condition,readFinishedAt:new Date().toISOString()};startSymbols()}
+const pictureSets=[
+ {name:'Kucing',emoji:'🐱'},{name:'Anjing',emoji:'🐶'},{name:'Kelinci',emoji:'🐰'},{name:'Beruang',emoji:'🐻'},
+ {name:'Katak',emoji:'🐸'},{name:'Rubah',emoji:'🦊'},{name:'Burung',emoji:'🐦'},{name:'Ikan',emoji:'🐟'},
+ {name:'Kupu-kupu',emoji:'🦋'},{name:'Kura-kura',emoji:'🐢'},{name:'Singa',emoji:'🦁'},{name:'Gajah',emoji:'🐘'}
+];
+let currentPicture=null,roundMatches=0,roundFound=0,roundIndex=0;
+function buildPictureRound(){
+ currentPicture=pictureSets[Math.floor(Math.random()*pictureSets.length)];
+ roundMatches=5;roundFound=0;roundIndex++;
+ target.textContent=currentPicture.emoji;
+ targetProgress.textContent=`Objek ${roundIndex}: ${currentPicture.name} • Ditemukan ${roundFound}/${roundMatches}`;
+ let distractors=pictureSets.filter(x=>x.name!==currentPicture.name);
+ let tiles=Array.from({length:24},(_,i)=>({item:i<roundMatches?currentPicture:distractors[Math.floor(Math.random()*distractors.length)]}));
+ for(let i=tiles.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[tiles[i],tiles[j]]=[tiles[j],tiles[i]]}
+ symbolGrid.innerHTML='';
+ tiles.forEach(t=>{let b=document.createElement('button');b.className='sym';b.textContent=t.item.emoji;b.setAttribute('aria-label',t.item.name);b.onclick=()=>{
+  if(b.disabled)return;b.disabled=true;b.classList.add('hit');symbolStats.selected++;
+  if(t.item.name===currentPicture.name){symbolStats.correct++;roundFound++;targetProgress.textContent=`Objek ${roundIndex}: ${currentPicture.name} • Ditemukan ${roundFound}/${roundMatches}`;if(roundFound===roundMatches){symbolStats.roundsCompleted++;setTimeout(()=>{if(remaining>0)buildPictureRound()},250)}}
+  else symbolStats.wrong++;
+ };symbolGrid.appendChild(b)});
+}
+function startSymbols(){
+ remaining=60;symbolStats={selected:0,correct:0,wrong:0,roundsCompleted:0};roundIndex=0;
+ clock.textContent='01:00';buildPictureRound();show('symbols');
+ tick=setInterval(()=>{remaining--;clock.textContent=`${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}`;
+  if(remaining<=0){clearInterval(tick);participant.sessions[session].symbolTask={...symbolStats,durationSeconds:60,targetsPresented:roundIndex};showQuiz()}
+ },1000)
+}
+let quizCorrect=[];
+function showQuiz(){let r=participant.plan[session].reading;quizTag.textContent=`${participant.code} • ${names[r]} • 15 soal`;quizForm.innerHTML='';quizAnswers=[];quizCorrect=[];questions[r].forEach((q,i)=>{let opts=q[1].map((text,j)=>({text,correct:'ABCD'[j]===q[2]}));for(let k=opts.length-1;k>0;k--){let j=Math.floor(Math.random()*(k+1));[opts[k],opts[j]]=[opts[j],opts[k]]}quizCorrect[i]='ABCD'[opts.findIndex(o=>o.correct)];let d=document.createElement('div');d.className='q';d.innerHTML=`<p>${i+1}. ${esc(q[0])}</p>`+opts.map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${'ABCD'[j]}"> ${'ABCD'[j]}. ${esc(o.text)}</label>`).join('');quizForm.appendChild(d)});show('quiz')}
+function submitQuiz(){let r=participant.plan[session].reading,answers=questions[r].map((q,i)=>{let v=quizForm.querySelector(`input[name="q${i}"]:checked`);return v?v.value:null});if(answers.some(v=>v===null)){if(!confirm('Ada soal yang belum dijawab. Kirim jawaban sekarang?'))return}let key=quizCorrect,score=answers.reduce((s,v,i)=>s+(v===key[i]?1:0),0);participant.sessions[session].quiz={answers,score,maxScore:15,submittedAt:new Date().toISOString()};if(session<2){session++;showReading()}else{participant.sessionsFinishedAt=new Date().toISOString();finalCode.textContent=participant.code;show('finish')}}
+function confirmCompletion(){if(!participant||!participant.sessionsFinishedAt){alert('Selesaikan seluruh sesi terlebih dahulu.');return}if(participant.confirmedAt){show('confirmation');return}participant.confirmedAt=new Date().toISOString();participant.status='completed';let all=JSON.parse(localStorage.getItem('stabilo_records')||'[]');all=all.filter(p=>p.code!==participant.code);all.push(participant);localStorage.setItem('stabilo_records',JSON.stringify(all));confirmedCode.textContent=participant.code;show('confirmation')}
+function openAdmin(){show('admin')}
+function loginAdmin(){if(pin.value!=='2468'){alert('PIN salah.');return}adminData.classList.remove('hidden');let all=JSON.parse(localStorage.getItem('stabilo_records')||'[]');tableWrap.innerHTML=`<p>Total partisipan selesai: <b>${all.length}</b></p><table><thead><tr><th>Kode</th><th>Nama</th><th>Usia</th><th>Asal institusi</th><th>Prodi</th><th>Kelas</th><th>Semester</th><th>Urutan kondisi</th><th>Skor bacaan</th><th>Total</th></tr></thead><tbody>${all.map(p=>`<tr><td>${p.code}</td><td>${esc(p.identity.name||'-')}</td><td>${p.identity.age??'-'}</td><td>${esc(p.identity.institution||'-')}</td><td>${esc(p.identity.major||'-')}</td><td>${esc(p.identity.className||'-')}</td><td>${p.identity.semester??'-'}</td><td>${p.plan.map(x=>conditions[x.condition]).join(' → ')}</td><td>${p.sessions.map(s=>s.quiz?s.quiz.score:'-').join(' / ')}</td><td>${p.sessions.reduce((n,s)=>n+(s.quiz?s.quiz.score:0),0)}</td></tr>`).join('')}</tbody></table>`}
+function flatRows(){return JSON.parse(localStorage.getItem('stabilo_records')||'[]').flatMap(p=>p.sessions.map((s,i)=>({participant_code:p.code,name:p.identity.name,age:p.identity.age,class_name:p.identity.className,semester:p.identity.semester,major:p.identity.major,institution:p.identity.institution,session:i+1,reading:names[s.reading],condition:conditions[s.condition],symbol_selected:s.symbolTask?.selected,symbol_correct:s.symbolTask?.correct,symbol_wrong:s.symbolTask?.wrong,symbol_seconds:s.symbolTask?.durationSeconds,quiz_score:s.quiz?.score,quiz_max:s.quiz?.maxScore,answers:s.quiz?.answers?.join('|')})))}
+function exportCSV(){let rows=flatRows();if(!rows.length){alert('Belum ada data selesai.');return}let keys=Object.keys(rows[0]),csv=[keys.join(','),...rows.map(r=>keys.map(k=>'"'+String(r[k]??'').replace(/"/g,'""')+'"').join(','))].join('\n');download(csv,'data_eksperimen_stabilo.csv','text/csv')}
+function exportJSON(){download(JSON.stringify(JSON.parse(localStorage.getItem('stabilo_records')||'[]'),null,2),'data_eksperimen_stabilo.json','application/json')}
+function download(content,name,type){let u=URL.createObjectURL(new Blob([content],{type})),a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
+</script></body></html>
